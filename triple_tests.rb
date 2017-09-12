@@ -1,0 +1,2 @@
+class TripleTests
+end
