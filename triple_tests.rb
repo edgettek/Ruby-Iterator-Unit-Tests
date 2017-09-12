@@ -14,7 +14,12 @@ class TripleTests < Minitest::Test
   #chunk_while
   #collect
   #collect_concat
-  #count
+  def test_count
+    result = @triple.count
+
+    assert_equal result, 3
+
+  end
   #cycle
   #detect
   #drop
