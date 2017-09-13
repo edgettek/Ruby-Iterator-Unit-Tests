@@ -14,12 +14,100 @@ class TripleTests < Minitest::Test
 
 
   # all?[{ |obj| block }] → true or false
+
+  def test_all_ints
+    result = @integers.all? do |num|
+      num != 0
+    end
+
+    assert_equal result, true
+  end
+
+  def test_all_ints_2
+    result = @integers.all? do |num|
+      num > 2
+    end
+
+    assert_equal result, false
+  end
+
+  def test_all_strings
+    result = @strings.all? do |name|
+      name.length != 0
+    end
+
+    assert_equal result, true
+  end
+
+  def test_all_strings_2
+    result = @strings.all? do |name|
+      name.length > 5
+    end
+
+    assert_equal result, false
+  end
+
   # any?[{ |obj| block }] → true or false
+
+  def test_any_ints
+    result = @integers.any? do |num|
+      num != 0
+    end
+
+    assert_equal result, true
+  end
+
+  def test_any_ints_2
+    result = @integers.any? do |num|
+      num > 2
+    end
+
+    assert_equal result, true
+  end
+
+  def test_any_strings
+    result = @strings.any? do |name|
+      name.length != 0
+    end
+
+    assert_equal result, true
+  end
+
+  def test_any_strings_2
+    result = @strings.any? do |name|
+      name.length > 5
+    end
+
+    assert_equal result, true
+  end
+
+
   # chunk { |elt| ... } → array
   # chunk_while { |elt_before,elt_after| bool } → array
+
+
   # collect { |obj| block } → array % same as map
+
+  def test_collect_ints
+    results = @integers.collect do |num|
+      num*num
+    end
+
+    assert_equal results, [1, 4, 9]
+  end
+
+  def test_collect_strings
+    results = @strings.collect do |name|
+      name + '!'
+    end
+
+    assert_equal results, ['Kyle!', 'Preston!', 'Renato!']
+  end
+
   # collect_concat { |obj| block } → array % same as flat_map
 
+  # count { |obj| block } → int
+  
   def test_count_ints
     result = @integers.count
 
@@ -737,40 +825,443 @@ class TripleTests < Minitest::Test
   end
 
   # min → obj
-  # min {| a,b | block } → obj
+
+  def test_min_ints
+    result = @integers.min
+
+    assert_equal result, 1
+  end
+
+  def test_min_strings
+    result = @strings.min
+
+    assert_equal result, 'Kyle'
+  end
+
+  # min { |a, b| block } → obj
+
+  def test_min_ints_2
+    result = @integers.min do |a, b|
+      a%2 <=> b%2
+    end
+
+    assert_equal result, 2
+  end
+
+  def test_min_strings_2
+    result = @strings.min do |a, b|
+      a.length <=> b.length
+    end
+
+    assert_equal result, 'Kyle'
+  end
+
+
   # min(n) → array
-  # min(n) {| a,b | block } → array
+
+  def test_min_ints_n
+    result = @integers.min(2)
+
+    assert_equal result, [1,2]
+  end
+
+  def test_min_strings_n
+    result = @strings.min(2)
+
+    assert_equal result, ['Kyle', 'Preston']
+  end
+
+  # min(n) {|a,b| block } → obj
+
+  def test_min_ints_2_n
+    result = @integers.min(2) do |a, b|
+      (a%2) <=> (b%2)
+    end
+
+    assert_equal result, [2, 3]
+  end
+
+  def test_min_strings_2_n
+    result = @strings.min(2) do |a, b|
+      a.length <=> b.length
+    end
+
+    assert_equal result, ['Kyle', 'Renato']
+  end
+
   # min_by {|obj| block } → obj
-  # min_by(n) {|obj| block } → array
+
+  def test_min_by_ints
+    result = @integers.min_by do |num|
+      num%2
+    end
+
+    assert_equal result, 2
+  end
+
+  def test_min_by_strings
+    result = @strings.min_by do |name|
+      name.length
+    end
+
+    assert_equal result, 'Kyle'
+  end
+
+  # min_by(n) {|obj| block } → obj
+
+  def test_min_by_ints_n
+    result = @integers.min_by(2) do |num|
+      num%2
+    end
+
+    assert_equal result, [2, 3]
+  end
+
+  def test_min_by_strings_n
+    result = @strings.min_by(2) do |name|
+      name.length
+    end
+
+    assert_equal result, ['Kyle', 'Renato']
+  end
+
+
   # minmax → [min, max]
+
+  def test_minmax_ints
+    result = @integers.minmax
+
+    assert_equal result, [1, 3]
+  end
+
+  def test_minmax_strings
+    result = @strings.minmax
+
+    assert_equal result, ['Kyle', 'Renato']
+  end
+
   # minmax { |a, b| block } → [min, max]
+
+  def test_minmax_ints_2
+    result = @integers.minmax do |a, b|
+      a*a <=> b*b
+    end
+
+    assert_equal result, [1, 3]
+  end
+
+  def test_minmax_strings_2
+    result = @strings.minmax do |a, b|
+      a.length <=> b.length
+    end
+
+    assert_equal result, ['Kyle', 'Preston']
+  end
+
   # minmax_by { |obj| block } → [min, max]
+
+  def test_minmax_by_ints
+    result = @integers.minmax_by do |a|
+      a*a
+    end
+
+    assert_equal result, [1, 3]
+  end
+
+  def test_minmax_by_strings
+    result = @strings.minmax_by do |a|
+      a.length
+    end
+
+    assert_equal result, ['Kyle', 'Preston']
+  end
+
   # none? { |obj| block } → true or false
+
+  def test_none_integers
+
+    result = @integers.none? do |num|
+      num*num == 25
+    end
+
+    assert_equal result, true
+  end
+
+  def test_none_strings
+
+    result = @strings.none? do |name|
+      name.length < 5
+    end
+
+    assert_equal result, false
+  end
+
+
   # one? { |obj| block } → true or false
+
+  def test_one_integers
+
+    result = @integers.one? do |num|
+      num*num == 9
+    end
+
+    assert_equal result, true
+  end
+
+  def test_one_strings
+
+    result = @strings.one? do |name|
+      name.length < 5
+    end
+
+    assert_equal result, true
+  end
+
   # partition { |obj| block } → [ true_array, false_array ]
+
+  def test_partition_ints
+
+    result = @integers.partition do |num|
+      num.even?
+    end
+
+    assert_equal result, [[2], [1, 3]]
+
+  end
+
+  def test_partition_strings
+
+    result = @strings.partition do |name|
+      name.length == 4
+    end
+
+    assert_equal result, [['Kyle'], ['Preston', 'Renato']]
+
+  end
+
   # reduce %see inject above
+
+
   # reject { |obj| block } → array
+
+  def test_reject_ints
+
+    result = @integers.reject do |num|
+      num > 2
+    end
+
+    assert_equal result, [1, 2]
+
+  end
+
+  def test_reject_strings
+
+    result = @strings.reject do |name|
+      name.length > 5
+    end
+
+    assert_equal result, ['Kyle']
+
+  end
+
   # reverse_each(*args) { |item| block } → enum
+
   # select { |obj| block } → array % same as find_all
+
+  def test_select_ints
+
+    result = @integers.select do |num|
+      num % 2 == 0
+    end
+
+    assert_equal result, [2]
+
+  end
+
+  def test_select_strings
+
+    result = @strings.select do |name|
+      name.eql? 'Kyle'
+    end
+
+    assert_equal result, ['Kyle']
+
+  end
+
+
   # slice_after(pattern) → array
   # slice_after { |elt| bool } → array
   # slice_before(pattern) → array
   # slice_before { |elt| bool } → array
   # slice_when { |elt_before, elt_after| bool } → array
+
+
+
   # sort { |a, b| block } → array
+
+  def test_sort_ints
+
+    result = @integers.sort do |a, b|
+      a <=> b
+    end
+
+    assert_equal result, [1, 2, 3]
+
+  end
+
+  def test_sort_strings
+
+    result = @strings.sort do |a, b|
+      a.length <=> b.length
+    end
+
+    assert_equal result, ['Kyle', 'Renato', 'Preston']
+
+  end
+
   # sort_by { |obj| block } → array
+
+  def test_sort_by_ints
+
+    result = @integers.sort_by do |a|
+      a
+    end
+
+    assert_equal result, [1, 2, 3]
+
+  end
+
+  def test_sort_by_strings
+
+    result = @strings.sort_by do |a|
+      a.length
+    end
+
+    assert_equal result, ['Kyle', 'Renato', 'Preston']
+
+  end
+
   # sum(init=0) → number
+
+  def test_sum_ints
+    result = @integers.sum
+
+    assert_equal result, 6
+  end
+
   # sum(init=0) { |e| expr } → number
+
+  def test_sum_ints_1
+    result = @integers.sum do |num|
+      num*2
+    end
+
+    assert_equal result, 12
+  end
+
   # take(n) → array
+
+  def test_take_ints
+    result = @integers.take 2
+
+    assert_equal result, [1, 2]
+  end
+
+  def test_take_strings
+    result = @strings.take 1
+
+    assert_equal result, ['Kyle']
+  end
+
   # take_while { |obj| block } → array
+
+  def test_take_while_ints
+    result = @integers.take_while do |num|
+      num < 3
+    end
+
+    assert_equal result, [1, 2]
+  end
+
+  def test_take_while_strings
+    result = @strings.take_while do |name|
+      name.length < 5
+    end
+
+    assert_equal result, ['Kyle']
+  end
+
   # to_a(*args) → array
+
+  def test_to_a_ints
+    result = @integers.to_a
+
+    assert_equal result, [1, 2, 3]
+  end
+
+  def test_to_a_strings
+    result = @strings.to_a
+
+    assert_equal result, ['Kyle', 'Preston', 'Renato']
+  end
+
   # to_h(*args) → hash
+
   # uniq → new_ary
+
+  def test_uniq_ints
+    result = @integers.uniq
+
+    assert_equal result, [1, 2, 3]
+  end
+
+  def test_uniq_strings
+    result = @strings.uniq
+
+    assert_equal result, ['Kyle', 'Preston', 'Renato']
+  end
+
   # uniq → { |item| ... } → new_ary
+
+  def test_uniq_ints_2
+    result = @integers.uniq do |num|
+      num*2
+    end
+
+    assert_equal result, [1, 2, 3]
+  end
+
+  def test_uniq_strings_2
+    result = @strings.uniq do |name|
+      name.length
+    end
+
+    assert_equal result, ['Kyle', 'Preston', 'Renato']
+  end
+
   # zip(arg, ...) → an_array_of_array
+
+  def test_zip_ints
+    result = @integers.zip([4, 5, 6])
+
+    assert_equal result, [[1,4],[2,5],[3,6]]
+  end
+
+  def test_zip_strings
+    result = @strings.zip([4, 5, 6])
+
+    assert_equal result, [['Kyle',4],['Preston',5],['Renato',6]]
+  end
+
   # zip(arg, ...) → { |arr| block } → nil
 
+  def test_zip_ints_2
+    c = []
+    result = @integers.zip([4, 5, 6]) do |a, b|
+      c << a + b
+    end
 
-
+    assert_nil result, nil
+  end
 
 end
