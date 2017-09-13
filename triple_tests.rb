@@ -112,7 +112,7 @@ class TripleTests < Minitest::Test
       print number
     end
 
-    assert_equal result, nil
+    assert_nil result, nil
   end
 
   def test_cycle_string
@@ -120,16 +120,128 @@ class TripleTests < Minitest::Test
       print name
     end
 
-    assert_equal result, nil
+    assert_nil result, nil
   end
 
 
   # detect(ifnone = nil) { |obj| block } → obj or nil
+
+  def test_detect_1_ints
+    result = @integers.detect do |number|
+      number%2 == 0
+    end
+
+    assert_equal result, 2
+  end
+
+  def test_detect_2_ints
+    result = @integers.detect(nil) do |number|
+      number%5 == 0
+    end
+
+    assert_nil result, nil
+  end
+
+  def test_detect_1_strings
+    result = @strings.detect(nil) do |name|
+      name > 'Allison'
+    end
+
+    assert_equal result, 'Kyle'
+  end
+
+  def test_detect_2_strings
+    result = @strings.detect(nil) do |name|
+      name < 'Allison'
+    end
+
+    assert_nil result, nil
+  end
+
+
   # drop(n) → array
+
+  def test_drop_ints
+    result = @integers.drop(1)
+
+
+    assert_equal result, [2, 3]
+  end
+
+  def test_drop_strings
+    result = @strings.drop(2)
+
+
+    assert_equal result, ["Renato"]
+  end
+
+
   # drop_while { |arr| block } → array
+
+  def test_drop_while_ints
+    result = @integers.drop_while do |num|
+      num<3
+    end
+
+    assert_equal result, [3]
+  end
+
+  def test_drop_while_strings
+    result = @strings.drop_while do |name|
+      name<'Liz'
+    end
+
+    assert_equal result, ["Preston", "Renato"]
+  end
+
+
   # each_cons(n) { ... } → nil
+
+  def test_each_cons_ints
+
+    result = @integers.each_cons(2) do |number|
+      print number
+    end
+
+    assert_nil result, nil
+  end
+
+  def test_each_cons_strings
+
+    result = @strings.each_cons(2) do |name|
+      print name
+    end
+
+    assert_nil result, nil
+  end
+
+
   # each_entry{ |obj| block } → enum
+
+
+
   # each_slice(n) { ... } → nil
+
+  def test_each_slice_ints
+
+    result = @integers.each_slice(2) do |number|
+      print number
+    end
+
+    assert_nil result, nil
+  end
+
+  def test_each_slice_strings
+
+    result = @strings.each_slice(1) do |name|
+      print name
+    end
+
+    assert_nil result, nil
+  end
+  
+
+
   # each_with_index(*args) { |obj, i| block } → enum
   # each_with_object(obj) { |(*args), memo_obj| ... } → obj
   # entries(*args) → array
